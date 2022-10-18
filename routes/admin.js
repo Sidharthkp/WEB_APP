@@ -1,5 +1,6 @@
 var express = require('express');
 const productHelpers = require('../helpers/product-helpers');
+const userHelpers = require('../helpers/account-helpers');
 var router = express.Router();
 
 /* GET admin listing. */
@@ -13,8 +14,18 @@ router.get('/', function (req, res, next) {
   }
 });
 
+router.get('/view-user', function (req,res) {
+  userHelpers.getAllUser().then((users) => {
+    res.render('admin/view-user', { title: 'admin', admin: true, users});
+  })
+})
+
 router.get('/add-products', (req, res) => {
-  res.render('admin/add-products')
+  res.render('admin/add-products', {admin: true})
+})
+
+router.get('/add-user', (req, res) => {
+  res.render('admin/add-user', {admin: true})
 })
 
 router.post('/add-products', (req, res) => {
@@ -30,6 +41,14 @@ router.post('/add-products', (req, res) => {
 
   });
 });
+
+router.post('/add-user', (req, res) => {
+  userHelpers.doSignup(req.body).then((response)=>{
+    console.log(response);
+  });
+  res.redirect('/admin/view-user');
+});
+
 router.get('/delete-product/:id', (req, res) => {
   let proId = req.params.id
   console.log(proId);
@@ -38,10 +57,24 @@ router.get('/delete-product/:id', (req, res) => {
   })
 })
 
+router.get('/delete-user/:id', (req, res) => {
+  let userId = req.params.id
+  console.log(userId);
+  userHelpers.deleteUser(userId).then((response) => {
+    res.redirect('/admin/view-user');
+  })
+})
+
 router.get('/edit-product/:id', async (req, res) => {
   let product = await productHelpers.getProductDetails(req.params.id)
   console.log(product);
   res.render('admin/edit-product', { product })
+})
+
+router.get('/edit-user/:id', async (req, res) => {
+  let user = await userHelpers.getUserDetails(req.params.id)
+  console.log(user);
+  res.render('admin/edit-user', { user })
 })
 
 router.post('/edit-product/:id', (req, res) => {
@@ -53,6 +86,12 @@ router.post('/edit-product/:id', (req, res) => {
       let image = req.files.Image
       image.mv('./public/product-images/' + id + '.jpg')
     }
+  })
+})
+
+router.post('/edit-user/:id', (req, res) => {
+  userHelpers.updateUser(req.params.id, req.body).then(() => {
+    res.redirect('/admin/view-user')
   })
 })
 

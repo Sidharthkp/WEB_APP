@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
 app.use(nocache());
 
-app.use(session({secret:"Key",cookie:{maxAge:10000}}))
+app.use(session({secret:"Key",cookie:{maxAge:300000}}))
 
 db.connect((err)=>{
   if(err)

@@ -1,0 +1,24 @@
+<section>
+    <div class="container">
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each users}}
+                <tr>
+                    <td>{{this.Name}}</td>
+                    <td>{{this.Email}}</td>
+                    <td>
+                        <a href="/admin/edit-user/{{this._id}}" class="btn btn-primary" type="button">Edit</a>
+                        <a href="/admin/delete-user/{{this._id}}" class="btn btn-danger" type="button" onclick="return confirm('Are you sure you want to delete the user {{this.Name}}?')">Delete</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
