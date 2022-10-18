@@ -33,7 +33,8 @@ router.get('/signup',(req,res)=>{
 router.post('/signup',(req,res)=>{
   accountHelpers.doSignup(req.body).then((response)=>{
     console.log(response);
-  }) 
+  });
+  res.redirect('/');
 })
 
 router.post('/login',(req,res)=>{
